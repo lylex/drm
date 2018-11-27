@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
+	"github.com/lylex/drm/pkg/files"
+	"github.com/lylex/drm/pkg/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -22,14 +23,20 @@ var (
 )
 
 // RootCmd represents the base command.
+// Actually, we do not valid the sub-command here since we need to execute something
+// like:
+//     drm test.txt
+//     drm -f test.txt
+//     drm ls
+// So we have to attept ArbitraryArgs.
 var RootCmd = &cobra.Command{
 	Use:   RootCmdName,
 	Short: "A delayed rm with safety.",
 	Long:  `This application is used to rm files with a latency.`,
+	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		dir, _ := os.Getwd()
 		for _, item := range args {
-			//	err := os.Rename(originalPath, newPath)
+			dir := files.GetWd()
 			currentPath := filepath.Join(dir, item)
 			fmt.Println(currentPath)
 		}
@@ -40,8 +47,7 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		fmt.Printf("Failed to execute command: %+v\n", err)
-		os.Exit(1)
+		utils.PrintErr("Failed to execute command: %+v\n", err)
 	}
 }
 
