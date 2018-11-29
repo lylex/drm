@@ -14,13 +14,20 @@ const (
 	RootCmdName = "drm"
 
 	// TODO replate it
-	TempFileStorePath = "/home/lylex/workspace/drm/temp"
+	TempFileStorePath = "/Users/xuq3/workspace/drm/tem"
 )
 
 var (
 	isForce     bool
 	isRecursive bool
 )
+
+func init() {
+	RootCmd.Flags().BoolVarP(&isRecursive, "recursive", "r", false, `ignore
+nonexistent files and arguments, never prompt`)
+	RootCmd.Flags().BoolVarP(&isForce, "force", "f", false, `remove directories
+and their contents recursively or not`)
+}
 
 // RootCmd represents the base command.
 // Actually, we do not valid the sub-command here since we need to execute something
@@ -35,10 +42,20 @@ var RootCmd = &cobra.Command{
 	Long:  `This application is used to rm files with a latency.`,
 	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		for _, item := range args {
-			dir := files.GetWd()
-			currentPath := filepath.Join(dir, item)
-			fmt.Println(currentPath)
+		for _, path := range args {
+			if !files.IsAbsolutePath(path) {
+				path = filepath.Join(files.GetWd(), path)
+			}
+			if files.IsDir(path) && !isRecursive {
+				utils.ErrExit(fmt.Sprintf("%s: %s: is a directory\n", RootCmdName, path), nil)
+			}
+			if !files.IsExist(path) {
+				if isForce {
+					continue
+				}
+				utils.ErrExit(fmt.Sprintf("%s: %s: No such file or directory\n", RootCmdName, path), nil)
+			}
+			files.Move(path, filepath.Join(TempFileStorePath, files.Name(path)))
 		}
 	},
 }
@@ -47,13 +64,6 @@ var RootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := RootCmd.Execute(); err != nil {
-		utils.PrintErr("Failed to execute command: %+v\n", err)
+		utils.ErrExit("Failed to execute command: %+v\n", err)
 	}
-}
-
-func init() {
-	RootCmd.Flags().BoolVarP(&isRecursive, "recursive", "r", false, `ignore
-nonexistent files and arguments, never prompt`)
-	RootCmd.Flags().BoolVarP(&isForce, "force", "f", false, `remove directories
-and their contents recursively or not`)
 }
