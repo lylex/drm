@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"path/filepath"
+	"time"
 
 	"github.com/lylex/drm/pkg/files"
 	"github.com/lylex/drm/pkg/utils"
@@ -20,12 +21,13 @@ const (
 var (
 	isForce     bool
 	isRecursive bool
+	version     string = "1.2"
 )
 
 func init() {
 	RootCmd.Flags().BoolVarP(&isRecursive, "recursive", "r", false, `ignore
 nonexistent files and arguments, never prompt`)
-	RootCmd.Flags().BoolVarP(&isForce, "force", "f", false, `remove directories
+	RootCmd.PersistentFlags().BoolVarP(&isForce, "force", "f", false, `remove directories
 and their contents recursively or not`)
 }
 
@@ -37,25 +39,29 @@ and their contents recursively or not`)
 //     drm ls
 // So we have to attept ArbitraryArgs.
 var RootCmd = &cobra.Command{
-	Use:   RootCmdName,
-	Short: "A delayed rm with safety.",
-	Long:  `This application is used to rm files with a latency.`,
-	Args:  cobra.ArbitraryArgs,
+	Use:     RootCmdName,
+	Short:   "A delayed rm with safety.",
+	Long:    `This application is used to rm files with a latency.`,
+	Version: fmt.Sprintf("%s", version),
+	Args:    cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		for _, path := range args {
 			if !files.IsAbsolutePath(path) {
 				path = filepath.Join(files.GetWd(), path)
 			}
-			if files.IsDir(path) && !isRecursive {
-				utils.ErrExit(fmt.Sprintf("%s: %s: is a directory\n", RootCmdName, path), nil)
-			}
+
 			if !files.IsExist(path) {
 				if isForce {
 					continue
 				}
 				utils.ErrExit(fmt.Sprintf("%s: %s: No such file or directory\n", RootCmdName, path), nil)
 			}
-			files.Move(path, filepath.Join(TempFileStorePath, files.Name(path)))
+
+			if files.IsDir(path) && !isRecursive {
+				utils.ErrExit(fmt.Sprintf("%s: %s: is a directory\n", RootCmdName, path), nil)
+			}
+			files.Move(path, filepath.Join(TempFileStorePath,
+				fmt.Sprintf("%d_%s", time.Now().UnixNano(), files.Name(path))))
 		}
 	},
 }
