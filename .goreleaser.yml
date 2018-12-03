@@ -1,0 +1,106 @@
+project_name: drm
+
+release:
+  github:
+    owner: lylex
+    name: drm
+  name_template: '{{.Tag}}'
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  -
+    main: ./main.go
+    binary: drm
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - "386"
+    goarm:
+      - "6"
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+
+archive:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm
+    }}v{{ .Arm }}{{ end }}'
+  format: tar.gz
+  files:
+    - LICENSE
+    - README.md
+    - CHANGELOG*
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+
+snapcraft:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm
+    }}v{{ .Arm }}{{ end }}'
+
+snapshot:
+  name_template: SNAPSHOT-{{ .Commit }}
+
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_checksums.txt'
+
+dist: dist
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
+nfpm:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+  replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+  homepage: https://github.com/lylex/drm
+  maintainer: Lyle <xuqianzhou@gmail.com>
+  description: A delayed rm with safety.
+  license: MIT
+  formats:
+    - deb
+  dependencies:
+    - bash
+  recommends:
+    - bzr
+    - gtk
+  conflicts:
+    - svn
+  bindir: /usr/bin
+  empty_folders:
+    - /usr/lib/drm
+  config_files:
+    "scripts/*.conf": "/etc/drm/*.conf"
+  scripts:
+    preinstall: "scripts/preinstall.sh"
+    postinstall: "scripts/postinstall.sh"
+    preremove: "scripts/preremove.sh"
+    postremove: "scripts/postremove.sh"
+  overrides:
+    deb:
+      conflicts:
+        - subversion
+      dependencies:
+        - git
+      suggests:
+        - gitk
+      recommends:
+        - tig
+      empty_folders:
+        - /var/lib/drm

@@ -1,0 +1,8 @@
+### Binary ###
+drm
+
+### MacOS ###
+*.DS_Store
+
+### Goreleaser ###
+dist/*
