@@ -21,7 +21,7 @@ const (
 var (
 	isForce     bool
 	isRecursive bool
-	version     string = "1.2"
+	version     string
 )
 
 func init() {

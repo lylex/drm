@@ -23,7 +23,7 @@ builds:
     goarm:
       - "6"
     ldflags:
-      - -s -w -X main.version={{.Version}}
+      - -s -w -X github.com/lylex/drm/cmd.version={{.Version}}
     env:
       - CGO_ENABLED=0
 
@@ -89,9 +89,9 @@ nfpm:
     "scripts/*.conf": "/etc/drm/*.conf"
   scripts:
     preinstall: "scripts/preinstall.sh"
-    postinstall: "scripts/postinstall.sh"
-    preremove: "scripts/preremove.sh"
-    postremove: "scripts/postremove.sh"
+    # postinstall: "scripts/postinstall.sh"
+    # preremove: "scripts/preremove.sh"
+    # postremove: "scripts/postremove.sh"
   overrides:
     deb:
       conflicts:
