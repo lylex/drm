@@ -3,6 +3,7 @@ drm
 
 ### MacOS ###
 *.DS_Store
+*.swp
 
 ### Goreleaser ###
 dist/*

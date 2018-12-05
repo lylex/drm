@@ -34,7 +34,8 @@ archive:
   files:
     - LICENSE
     - README.md
-    - CHANGELOG*
+    - scripts/install_mac.sh
+    - scripts/drm.conf
   replacements:
     darwin: Darwin
     linux: Linux
@@ -82,9 +83,9 @@ nfpm:
     - gtk
   conflicts:
     - svn
-  bindir: /usr/bin
+  bindir: /usr/local/bin
   empty_folders:
-    - /usr/lib/drm
+    - /usr/local/lib/drm
   config_files:
     "scripts/*.conf": "/etc/drm/*.conf"
   scripts:

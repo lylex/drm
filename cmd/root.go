@@ -17,7 +17,7 @@ const (
 	RootCmdName = "drm"
 
 	// DefaultConfigPath represents the default path for config.
-	DefaultConfigPath = "/etc/drm/drm.cfg"
+	DefaultConfigPath = "/etc/drm/drm.conf"
 
 	// TempFileStorePath TODO replate it
 	TempFileStorePath = "/Users/xuq3/workspace/drm/tem"
