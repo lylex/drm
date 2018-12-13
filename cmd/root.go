@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
 
+	"github.com/lylex/drm/pkg/blobs"
 	"github.com/lylex/drm/pkg/files"
 	"github.com/lylex/drm/pkg/utils"
 	"github.com/spf13/cobra"
@@ -21,6 +21,8 @@ const (
 
 	// TempFileStorePath TODO replate it
 	TempFileStorePath = "/Users/xuq3/workspace/drm/tem"
+
+	CfgBlobPathKey = "blobPath"
 )
 
 var (
@@ -80,8 +82,12 @@ var RootCmd = &cobra.Command{
 			if files.IsDir(path) && !isRecursive {
 				utils.ErrExit(fmt.Sprintf("%s: %s: is a directory\n", RootCmdName, path), nil)
 			}
-			files.Move(path, filepath.Join(string(viper.GetString("dataPath")),
-				fmt.Sprintf("%d_%s", time.Now().UnixNano(), files.Name(path))))
+
+			blob := blobs.Create(path)
+			files.Move(path, filepath.Join(string(viper.GetString(CfgBlobPathKey)), blob.Name()))
+			if err := blob.Save(); err != nil {
+				utils.ErrExit(fmt.Sprintf("%s: failed to save metadata for %s\n", RootCmdName, path), err)
+			}
 		}
 	},
 }

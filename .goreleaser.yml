@@ -104,4 +104,4 @@ nfpm:
       recommends:
         - tig
       empty_folders:
-        - /var/lib/drm
+        - /var/local/lib/drm

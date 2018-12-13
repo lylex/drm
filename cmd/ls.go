@@ -11,11 +11,10 @@ const (
 )
 
 // lsCmd represents the ls command.
-// TODO fill the TBDs
 var lsCmd = &cobra.Command{
 	Use:   lsCmdUse,
-	Short: "short TBD",
-	Long:  `long TBD`,
+	Short: "list all the deleted objects",
+	Long:  `list all the deleted objects, and all can be resumed`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("in the ls cmd")
 	},

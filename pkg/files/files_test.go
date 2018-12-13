@@ -23,3 +23,23 @@ func TestIsAbsolutePath(t *testing.T) {
 		}
 	}
 }
+
+func TestDir(t *testing.T) {
+	var testcases = []struct {
+		path           string
+		expectedResult string
+	}{
+		{"/dir", "/"},
+		{"dir", "."},
+		{"/dir1/dir2", "/dir1"},
+		{"dir1/dir2", "dir1"},
+		{"", "."},
+	}
+
+	for _, testcase := range testcases {
+		r := Dir(testcase.path)
+		if r != testcase.expectedResult {
+			t.Errorf("Get dir from \"%s\" failed, expect %v, got %v", testcase.path, testcase.expectedResult, r)
+		}
+	}
+}

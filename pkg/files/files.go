@@ -2,6 +2,7 @@ package files
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/lylex/drm/pkg/utils"
@@ -48,9 +49,14 @@ func Move(src, dir string) {
 	}
 }
 
-// Name is used to retrieve the name of the file or directory of the pointed path.
+// Name is used to retrieve the basename of the file or directory of the given path.
 func Name(path string) string {
-	return getFileInfo(path).Name()
+	return filepath.Base(path)
+}
+
+// Dir retrieves the Directory path of the passed in full path.
+func Dir(fullPath string) string {
+	return filepath.Dir(fullPath)
 }
 
 func getFileInfo(path string) os.FileInfo {
