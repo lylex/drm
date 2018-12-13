@@ -12,22 +12,29 @@ import (
 )
 
 const (
+	// MaxRandomNumber represents the random number range [0, MaxRandomNumber).
 	MaxRandomNumber int = 10000
 
+	// MetaDataDB represents the name of the file used for storing metadata.
 	MetaDataDB string = "data.db"
 
+	// CfgDataPathKey represents the dataPath key in config.
 	CfgDataPathKey = "dataPath"
 )
 
+// Blob represents the blob instance.
 type Blob struct {
+	// FileName represents the file name of the deleted file.
 	FileName string
-	Dir      string
+
+	// Dir represent where the blob stored before deleted.
+	Dir string
 
 	// CreatedAt represents when the blob is created, i.e. when it is deleted.
 	CreatedAt time.Time
 }
 
-// Create make a blob metadate.
+// Create makes a blob metadate.
 func Create(fullPath string) *Blob {
 	return &Blob{
 		FileName:  files.Name(fullPath),
@@ -36,6 +43,7 @@ func Create(fullPath string) *Blob {
 	}
 }
 
+// Name gets the name of the blob.
 func (b *Blob) Name() string {
 	return fmt.Sprintf("%d_%4d_%s",
 		b.CreatedAt.UnixNano(),
@@ -43,7 +51,7 @@ func (b *Blob) Name() string {
 		b.FileName)
 }
 
-// TODO
+// Save stores the blob metadata to disk.
 func (b *Blob) Save() error {
 	db, err := buntdb.Open(viper.GetString(CfgDataPathKey) + MetaDataDB)
 	if err != nil {

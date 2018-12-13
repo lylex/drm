@@ -22,6 +22,7 @@ const (
 	// TempFileStorePath TODO replate it
 	TempFileStorePath = "/Users/xuq3/workspace/drm/tem"
 
+	// CfgBlobPathKey represents the blobPath key in config.
 	CfgBlobPathKey = "blobPath"
 )
 

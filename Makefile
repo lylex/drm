@@ -3,6 +3,7 @@
 GO_BIN ?= go
 GOFMT ?= gofmt
 GOIMPORTS ?= goimports
+GOLINT ?= golint
 SOURCE_FILES ?= ./...
 
 export GO111MODULE := on
@@ -14,6 +15,10 @@ test:
 .PHONY: cover
 cover: test
 	$(GO_BIN) tool cover -html=coverage.out
+
+.PHONY: lint
+lint:
+	$(GOLINT) ./...
 
 .PHONY: fmt
 fmt:
