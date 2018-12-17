@@ -2,8 +2,10 @@ module github.com/lylex/drm
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/apcera/termtables v0.0.0-20170405184538-bcbc5dc54055
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.5
+	github.com/mattn/go-runewidth v0.0.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

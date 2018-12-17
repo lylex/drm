@@ -7,6 +7,7 @@ CFG_DIR=/etc/drm
 DATA_DIR=/usr/local/lib/drm
 BLOB_DIR=$DATA_DIR/blob
 BIN_DIR=/usr/local/bin/
+BIN_NAME=drm
 
 [ -d $CFG_DIR ] || mkdir $CFG_DIR
 
@@ -17,3 +18,5 @@ fi
 
 cp $WORK_DIR/drm.conf $CFG_DIR/drm.conf
 cp $WORK_DIR/../drm $BIN_DIR
+
+alias rm='$$BIN_NAME' >> ~/.bashrc

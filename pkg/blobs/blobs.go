@@ -72,3 +72,34 @@ func (b *Blob) Save() error {
 
 	return nil
 }
+
+// GetAll returns all the blobs in database.
+func GetAll() ([]*Blob, error) {
+	db, err := buntdb.Open(viper.GetString(CfgDataPathKey) + MetaDataDB)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	rawValues := make([]string, 0)
+	err = db.View(func(tx *buntdb.Tx) error {
+		err := tx.Ascend("", func(key, value string) bool {
+			rawValues = append(rawValues, value)
+			return true
+		})
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	blobs := make([]*Blob, 0)
+	for _, value := range rawValues {
+		var obj Blob
+		if err := utils.Unmarshal(value, &obj); err != nil {
+			return nil, err
+		}
+		blobs = append(blobs, &obj)
+	}
+	return blobs, nil
+}
