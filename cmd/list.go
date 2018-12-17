@@ -45,7 +45,7 @@ func (t *table) addRow(items ...interface{}) {
 var listCmd = &cobra.Command{
 	Use:   listCmdName,
 	Short: "list all the deleted objects",
-	Long:  `list all the deleted objects, and all can be resumed, try "drm resume" to resume an object`,
+	Long:  `list all the deleted objects, and all can be restored, try "drm restore" to restore an object`,
 	Run: func(cmd *cobra.Command, args []string) {
 		table := createTable()
 		table.addHeaders("Name", "Path", "DeleteAt")
