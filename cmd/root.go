@@ -87,7 +87,7 @@ var RootCmd = &cobra.Command{
 			blob := blobs.Create(path)
 			files.Move(path, filepath.Join(string(viper.GetString(CfgBlobPathKey)), blob.Name()))
 			if err := blob.Save(); err != nil {
-				utils.ErrExit(fmt.Sprintf("%s: failed to save metadata for %s\n", RootCmdName, path), err)
+				utils.ErrExit(fmt.Sprintf("%s: failed to save metadata for %s", RootCmdName, path), nil)
 			}
 		}
 	},

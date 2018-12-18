@@ -6,9 +6,6 @@ import (
 	"time"
 
 	"github.com/lylex/drm/pkg/files"
-	"github.com/lylex/drm/pkg/utils"
-	"github.com/spf13/viper"
-	"github.com/tidwall/buntdb"
 )
 
 const (
@@ -53,53 +50,49 @@ func (b *Blob) Name() string {
 
 // Save stores the blob metadata to disk.
 func (b *Blob) Save() error {
-	db, err := buntdb.Open(viper.GetString(CfgDataPathKey) + MetaDataDB)
-	if err != nil {
+	var bg *blobGroup
+	var err error
+	if bg, err = getBlobGroup(b.FileName); err != nil {
 		return err
 	}
-	defer db.Close()
-
-	var json string
-	json, err = utils.Marshal(*b)
-	if err != nil {
-		return err
+	if bg == nil {
+		bg = &blobGroup{
+			FileName: b.FileName,
+		}
 	}
 
-	err = db.Update(func(tx *buntdb.Tx) error {
-		_, _, err := tx.Set(b.FileName, json, nil)
+	if err = bg.add(b); err != nil {
 		return err
-	})
+	}
+	if err = bg.save(); err != nil {
+		return err
+	}
 
 	return nil
 }
 
 // GetAll returns all the blobs in database.
 func GetAll() ([]*Blob, error) {
-	db, err := buntdb.Open(viper.GetString(CfgDataPathKey) + MetaDataDB)
+	db, err := openDB()
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
 
-	rawValues := make([]string, 0)
-	err = db.View(func(tx *buntdb.Tx) error {
-		err := tx.Ascend("", func(key, value string) bool {
-			rawValues = append(rawValues, value)
-			return true
-		})
-		return err
-	})
-	if err != nil {
+	var bgs []*blobGroup
+	if bgs, err = getAllBlobGroup(); err != nil {
 		return nil, err
 	}
 
 	blobs := make([]*Blob, 0)
-	for _, value := range rawValues {
-		var obj Blob
-		if err := utils.Unmarshal(value, &obj); err != nil {
-			return nil, err
+	for _, bg := range bgs {
+		if bg.Count == 0 {
+			continue
 		}
-		blobs = append(blobs, &obj)
+		for _, b := range bg.Blobs {
+			blobs = append(blobs, &b)
+		}
 	}
+
 	return blobs, nil
 }
