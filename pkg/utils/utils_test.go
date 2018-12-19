@@ -1,6 +1,8 @@
 package utils
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestMarshal(t *testing.T) {
 	type ColorGroup struct {
@@ -46,5 +48,26 @@ func TestUnmarshal(t *testing.T) {
 	}
 	if err != nil {
 		t.Errorf("unexpected error occured: %v", err)
+	}
+}
+func TestGenerateRandString(t *testing.T) {
+	var testcases = []struct {
+		n         int
+		resultLen int
+	}{
+		{1, 1},
+		{6, 6},
+	}
+
+	for _, testcase := range testcases {
+		result := GenerateRandString(testcase.n)
+		if len(result) != testcase.resultLen {
+			t.Errorf("Generate radom string failed, expect %d, got %d", testcase.resultLen, len(result))
+		}
+	}
+
+	// We deside to ignore the tiny probability.
+	if GenerateRandString(6) == GenerateRandString(6) {
+		t.Errorf("Generate radom string should not be the same")
 	}
 }

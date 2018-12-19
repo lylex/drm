@@ -3,10 +3,20 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 
 	json "github.com/json-iterator/go"
 )
+
+const (
+	dict = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
 
 // ErrExit is used to print error to stderr, and then exist with code 1.
 func ErrExit(msg string, err error) {
@@ -41,4 +51,13 @@ func Unmarshal(s string, obj interface{}) error {
 		return errors.New("failed to unmarshal to object")
 	}
 	return nil
+}
+
+// GenerateRandString creates a radom string with a fixed length.
+func GenerateRandString(n int) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = dict[rand.Intn(len(dict))]
+	}
+	return string(b)
 }

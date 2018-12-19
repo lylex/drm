@@ -1,11 +1,12 @@
 package blobs
 
 import (
+	"errors"
 	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/lylex/drm/pkg/files"
+	"github.com/lylex/drm/pkg/utils"
 )
 
 const (
@@ -19,6 +20,14 @@ const (
 	CfgDataPathKey = "dataPath"
 )
 
+var (
+	// ErrOperateDB is returned when unknow error hanppend from database.
+	ErrOperateDB = errors.New("error happended when operating database")
+
+	// ErrNotFound represents no record found.
+	ErrNotFound = errors.New("not found")
+)
+
 // Blob represents the blob instance.
 type Blob struct {
 	// FileName represents the file name of the deleted file.
@@ -29,6 +38,9 @@ type Blob struct {
 
 	// CreatedAt represents when the blob is created, i.e. when it is deleted.
 	CreatedAt time.Time
+
+	// ID used to indentify blob when two or more files has the same filename.
+	ID string
 }
 
 // Create makes a blob metadate.
@@ -37,14 +49,15 @@ func Create(fullPath string) *Blob {
 		FileName:  files.Name(fullPath),
 		Dir:       files.Dir(fullPath),
 		CreatedAt: time.Now(),
+		ID:        utils.GenerateRandString(6),
 	}
 }
 
 // Name gets the name of the blob.
 func (b *Blob) Name() string {
-	return fmt.Sprintf("%d_%4d_%s",
+	return fmt.Sprintf("%d_%s_%s",
 		b.CreatedAt.UnixNano(),
-		rand.Intn(MaxRandomNumber),
+		b.ID,
 		b.FileName)
 }
 
@@ -69,6 +82,41 @@ func (b *Blob) Save() error {
 	}
 
 	return nil
+}
+
+// Destroy deletes a blob from database.
+// Only Filename and ID are compared.
+func (b *Blob) Destroy() error {
+	bg, err := getBlobGroup(b.FileName)
+	if err != nil {
+		return ErrOperateDB
+	}
+
+	if bg == nil {
+		return ErrNotFound
+	}
+
+	found := false
+	for i, c := range bg.Blobs {
+		if c.ID == b.ID {
+			found = true
+			bg.Blobs[i] = bg.Blobs[len(bg.Blobs)-1]
+			bg.Blobs = bg.Blobs[:len(bg.Blobs)-1]
+			bg.Count--
+			break
+		}
+	}
+	if !found {
+		return ErrNotFound
+	}
+
+	if bg.Count == 0 {
+		err = bg.destroy()
+	} else {
+		err = bg.save()
+	}
+
+	return err
 }
 
 // GetAll returns all the blobs in database.

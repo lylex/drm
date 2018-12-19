@@ -49,6 +49,11 @@ func Move(src, dir string) {
 	}
 }
 
+// Mkdir create a directry.
+func Mkdir(path string) error {
+	return os.MkdirAll(path, os.ModePerm)
+}
+
 // Name is used to retrieve the basename of the file or directory of the given path.
 func Name(path string) string {
 	return filepath.Base(path)

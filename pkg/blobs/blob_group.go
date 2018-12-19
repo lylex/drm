@@ -106,7 +106,7 @@ func (bg *blobGroup) save() error {
 		return err
 	})
 
-	return nil
+	return err
 }
 
 func (bg *blobGroup) add(b *Blob) error {
@@ -117,6 +117,21 @@ func (bg *blobGroup) add(b *Blob) error {
 	bg.Blobs = append(bg.Blobs, *b)
 	bg.Count++
 	return nil
+}
+
+func (bg *blobGroup) destroy() error {
+	db, err := openDB()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	err = db.Update(func(tx *buntdb.Tx) error {
+		_, err := tx.Delete(bg.FileName)
+		return err
+	})
+
+	return err
 }
 
 // openDB opens a DB, should be explicitly closed later.

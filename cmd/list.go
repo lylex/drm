@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/apcera/termtables"
 	"github.com/lylex/drm/pkg/blobs"
@@ -35,6 +36,11 @@ func createTable() *table {
 
 func (t *table) addHeaders(headers ...interface{}) {
 	t.AddHeaders(headers...)
+	seperators := make([]interface{}, 0)
+	for _, v := range headers {
+		seperators = append(seperators, strings.Repeat("-", len(v.(string))))
+	}
+	t.AddRow(seperators...)
 }
 
 func (t *table) addRow(items ...interface{}) {
@@ -48,14 +54,14 @@ var listCmd = &cobra.Command{
 	Long:  `list all the deleted objects, and all can be restored, try "drm restore" to restore an object`,
 	Run: func(cmd *cobra.Command, args []string) {
 		table := createTable()
-		table.addHeaders("Name", "Path", "DeleteAt")
+		table.addHeaders("Name", "Path", "DeleteAt", "ID")
 
 		blobs, err := blobs.GetAll()
 		if err != nil {
 			utils.ErrExit(fmt.Sprintf("%s %s: failed to retrieve data from database\n", RootCmdName, listCmdName), err)
 		}
 		for _, blob := range blobs {
-			table.addRow(blob.FileName, blob.Dir, blob.CreatedAt.Format(timeFormat))
+			table.addRow(blob.FileName, blob.Dir, blob.CreatedAt.Format(timeFormat), blob.ID)
 		}
 		fmt.Println(table.Render())
 	},

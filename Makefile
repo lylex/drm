@@ -10,7 +10,7 @@ export GO111MODULE := on
 
 .PHONY: test
 test:
-	$(GO_BIN) test -v -failfast -race -coverpkg=./... -covermode=atomic -coverprofile=coverage.out $(SOURCE_FILES) -run -timeout=5m
+	$(GO_BIN) test -v -failfast -race -coverpkg=./... -covermode=atomic -coverprofile=coverage.out $(SOURCE_FILES) -timeout=5m
 
 .PHONY: cover
 cover: test
