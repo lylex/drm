@@ -9,6 +9,8 @@ BLOB_DIR=$DATA_DIR/blob
 BIN_DIR=/usr/local/bin/
 BIN_NAME=drm
 
+CRON="0 0,6,12,18 * * * $BIN_NAME gc"
+
 [ -d $CFG_DIR ] || mkdir $CFG_DIR
 
 if [ ! -d $DATA_DIR ]; then
@@ -16,7 +18,12 @@ if [ ! -d $DATA_DIR ]; then
   chmod -R 777 $DATA_DIR
 fi
 
-cp $WORK_DIR/drm.conf $CFG_DIR/drm.conf
-cp $WORK_DIR/../drm $BIN_DIR
+cp $WORK_DIR/../drm.conf $CFG_DIR/drm.conf
+cp $WORK_DIR/../../drm $BIN_DIR
 
-alias rm='$$BIN_NAME' >> ~/.bashrc
+echo "alias rm=\"$BIN_NAME\"" >> /etc/profile
+
+# setup cronjob
+crontab -l -u root > crontab.tmp
+printf '%s\n' "$CRON" >> crontab.tmp
+crontab -u root crontab.tmp && rm -f crontab.tmp

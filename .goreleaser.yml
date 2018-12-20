@@ -34,8 +34,7 @@ archive:
   files:
     - LICENSE
     - README.md
-    - scripts/install_mac.sh
-    - scripts/drm.conf
+    - scripts/**/**
   replacements:
     darwin: Darwin
     linux: Linux
@@ -89,10 +88,10 @@ nfpm:
   config_files:
     "scripts/*.conf": "/etc/drm/*.conf"
   scripts:
-    preinstall: "scripts/preinstall.sh"
-    # postinstall: "scripts/postinstall.sh"
-    # preremove: "scripts/preremove.sh"
-    # postremove: "scripts/postremove.sh"
+    preinstall: "scripts/linux/preinstall.sh"
+    postinstall: "scripts/linux/postinstall.sh"
+    # preremove: "scripts/linux/preremove.sh"
+    postremove: "scripts/linux/postremove.sh"
   overrides:
     deb:
       conflicts:
