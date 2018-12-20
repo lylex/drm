@@ -2,9 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
-	"github.com/apcera/termtables"
+	"github.com/cheynewallace/tabby"
 	"github.com/lylex/drm/pkg/blobs"
 	"github.com/lylex/drm/pkg/utils"
 	"github.com/spf13/cobra"
@@ -17,34 +16,21 @@ const (
 )
 
 type table struct {
-	*termtables.Table
+	*tabby.Tabby
 }
 
 func createTable() *table {
-	t := &table{
-		termtables.CreateTable(),
+	return &table{
+		tabby.New(),
 	}
-
-	t.Style.SkipBorder = true
-
-	t.Style.BorderX = ""
-	t.Style.BorderY = ""
-	t.Style.BorderI = ""
-
-	return t
 }
 
 func (t *table) addHeaders(headers ...interface{}) {
-	t.AddHeaders(headers...)
-	seperators := make([]interface{}, 0)
-	for _, v := range headers {
-		seperators = append(seperators, strings.Repeat("-", len(v.(string))))
-	}
-	t.AddRow(seperators...)
+	t.AddHeader(headers...)
 }
 
 func (t *table) addRow(items ...interface{}) {
-	t.AddRow(items...)
+	t.AddLine(items...)
 }
 
 // listCmd represents the list command.
@@ -63,7 +49,7 @@ var listCmd = &cobra.Command{
 		for _, blob := range blobs {
 			table.addRow(blob.FileName, blob.Dir, blob.CreatedAt.Format(timeFormat), blob.ID)
 		}
-		fmt.Println(table.Render())
+		table.Print()
 	},
 }
 
