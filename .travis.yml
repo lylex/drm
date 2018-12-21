@@ -24,4 +24,3 @@ script:
   - make lint && make vet
   - make test
   - make build
-  - make dist
