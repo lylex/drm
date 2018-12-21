@@ -8,8 +8,12 @@ SOURCE_FILES ?= ./...
 
 export GO111MODULE := on
 
+.PHONY: mod
+mod:
+	$(GO_BIN) mod download
+
 .PHONY: test
-test:
+test: mod
 	$(GO_BIN) test -v -failfast -race -coverpkg=./... -covermode=atomic -coverprofile=coverage.out $(SOURCE_FILES) -timeout=5m
 
 .PHONY: cover
@@ -20,6 +24,10 @@ cover: test
 lint:
 	$(GOLINT) ./...
 
+.PHONY: vet
+vet:
+	$(GO_BIN) vet ./...
+
 .PHONY: fmt
 fmt:
 	find . -name '*.go' -not -wholename './vendor/*' | \
@@ -29,7 +37,7 @@ fmt:
 		done
 
 .PHONY: build
-build:
+build: mod
 	$(GO_BIN) build -o drm .
 
 .PHONY: dist

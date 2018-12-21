@@ -1,6 +1,7 @@
 package blobs
 
 import (
+	"fmt"
 	"os"
 	"testing"
 	"time"
@@ -26,7 +27,7 @@ func TestName(t *testing.T) {
 		ID:        randStr,
 	}
 	ret := blob.Name()
-	expectName := "1136214245000000000_ti2SMt_testname"
+	expectName := fmt.Sprintf("1136214245000000000_%s_testname", randStr)
 	if ret != expectName {
 		t.Errorf("Failed to get name, expect %s, got %s", expectName, ret)
 	}

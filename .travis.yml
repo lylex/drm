@@ -1,0 +1,26 @@
+language: go
+
+go:
+  - 1.11.x
+
+os:
+  - linux
+  - osx
+
+dist: xenial
+
+sudo: false
+
+before_install:
+  - go get -u golang.org/x/lint/golint
+
+install: true
+
+env:
+  - GO111MODULE=on
+
+script:
+  - make lint && make vet
+  - make test
+  - make build
+  - make dist
