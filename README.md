@@ -106,25 +106,27 @@ README.md  /Users/lylex/workspace/drm/dist/temp  2018-12-22 22:38:34  SHgtPG
 Run
 
 ```
-drm restore LICENSE
+drm restore testfile
 ```
 
 Or
 
 ```
-rm restore LICENSE
+rm restore testfile
 ```
 
-Then `LICENSE` will be resumed.
+Then the file "testfile" will be resumed.
 
 
-## ✋ Contributing
+✋ Contributing
+========
 
 I will be so happay if this tiny tool can help you in any way. And I am really glad if you can help make it better. So please feel free to contribute by
 
 - Opening an [issue](https://github.com/lylex/drm/issues/new)
 - Sending me feedback via [email](mailto://xuqianzhou@gmail.com)
 
-## License
+License
+========
 
 Drm source code is available under the MIT [License](/LICENSE).
