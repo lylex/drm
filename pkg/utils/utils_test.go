@@ -23,7 +23,7 @@ func TestMarshal(t *testing.T) {
 		t.Errorf("failed to marshal object, expect %v, got %v", expect, result)
 	}
 	if err != nil {
-		t.Errorf("unexpected error occured: %v", err)
+		t.Errorf("unexpected error occurred: %v", err)
 	}
 }
 
@@ -47,7 +47,7 @@ func TestUnmarshal(t *testing.T) {
 		t.Errorf("failed to unmarshal string to object: expect %v, got %v", expect, group)
 	}
 	if err != nil {
-		t.Errorf("unexpected error occured: %v", err)
+		t.Errorf("unexpected error occurred: %v", err)
 	}
 }
 func TestGenerateRandString(t *testing.T) {
@@ -66,7 +66,7 @@ func TestGenerateRandString(t *testing.T) {
 		}
 	}
 
-	// We deside to ignore the tiny probability.
+	// We decide to ignore the tiny probability.
 	if GenerateRandString(6) == GenerateRandString(6) {
 		t.Errorf("Generate radom string should not be the same")
 	}

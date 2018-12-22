@@ -45,6 +45,9 @@ func getBlobGroup(filename string) (*blobGroup, error) {
 		raw = val
 		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if raw == "" {
 		return nil, nil

@@ -110,6 +110,6 @@ func initConfig() {
 		utils.ErrExit("Failed to read configuration file: %+v\n", err)
 	}
 
-	// read config from enviroment virable.
+	// read config from environment virable.
 	viper.AutomaticEnv()
 }

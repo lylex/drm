@@ -22,7 +22,7 @@ const (
 
 var (
 	// ErrOperateDB is returned when unknow error hanppend from database.
-	ErrOperateDB = errors.New("error happended when operating database")
+	ErrOperateDB = errors.New("error happened when operating database")
 
 	// ErrNotFound represents no record found.
 	ErrNotFound = errors.New("not found")
@@ -77,11 +77,8 @@ func (b *Blob) Save() error {
 	if err = bg.add(b); err != nil {
 		return err
 	}
-	if err = bg.save(); err != nil {
-		return err
-	}
 
-	return nil
+	return bg.save()
 }
 
 // Destroy deletes a blob from database.
