@@ -8,6 +8,13 @@ SOURCE_FILES ?= ./...
 
 export GO111MODULE := on
 
+.PHONY: setup
+setup:
+	echo $$(go env GOPATH)
+	cd $$(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
+	go install -ldflags "-X 'main.version=$$(git describe --tags)' -X 'main.commit=$$(git rev-parse --short HEAD)' -X 'main.date=$$(date)'"
+	go get -u github.com/goreleaser/goreleaser
+
 .PHONY: mod
 mod:
 	$(GO_BIN) mod download
