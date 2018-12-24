@@ -3,7 +3,7 @@
 GO_BIN ?= go
 GOFMT ?= gofmt
 GOIMPORTS ?= goimports
-GOLINT ?= golint
+GOLINT ?= golangci-lint
 SOURCE_FILES ?= ./...
 
 export GO111MODULE := on
@@ -22,7 +22,7 @@ cover: test
 
 .PHONY: lint
 lint:
-	$(GOLINT) ./...
+	$(GOLINT) run ./...
 
 .PHONY: vet
 vet:

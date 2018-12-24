@@ -67,7 +67,9 @@ func TestGenerateRandString(t *testing.T) {
 	}
 
 	// We decide to ignore the tiny probability.
-	if GenerateRandString(6) == GenerateRandString(6) {
+	randLeft := GenerateRandString(6)
+	randRight := GenerateRandString(6)
+	if randLeft == randRight {
 		t.Errorf("Generate radom string should not be the same")
 	}
 }

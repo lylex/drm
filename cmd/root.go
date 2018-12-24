@@ -55,13 +55,15 @@ var RootCmd = &cobra.Command{
 	Use:     RootCmdName,
 	Short:   "A delayed rm with safety.",
 	Long:    `This application is used to rm files with a latency.`,
-	Version: fmt.Sprintf("%s", version),
+	Version: version,
 	Args:    cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			msg := "no operation concluded"
 			fmt.Fprintf(os.Stderr, fmt.Sprintf("Error: %s\n", msg))
-			cmd.Usage()
+			if err := cmd.Usage(); err != nil {
+				panic(err)
+			}
 			utils.ErrExit(fmt.Sprintf("\nFailed to execute command: %s\n", msg), nil)
 		}
 

@@ -12,7 +12,9 @@ dist: xenial
 sudo: false
 
 before_install:
-  - go get -u golang.org/x/lint/golint
+  - go get -u github.com/golangci/golangci-lint
+  - cd $(go env GOPATH)/src/github.com/golangci/golangci-lint/cmd/golangci-lint
+  - go install -ldflags "-X 'main.version=$(git describe --tags)' -X 'main.commit=$(git rev-parse --short HEAD)' -X 'main.date=$(date)'"
   - go get -u github.com/goreleaser/goreleaser
 
 install: true

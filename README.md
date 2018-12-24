@@ -8,6 +8,9 @@
 <a href="https://godoc.org/github.com/lylex/drm"><img src="https://img.shields.io/badge/api-reference-blue.svg?style=flat-square" alt="GoDoc"></a>
 <a href="https://github.com/lylex/drm/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square" alt="License"></a>
 <a href="https://github.com/lylex/drm"><img src="https://img.shields.io/codecov/c/github/lylex/drm/master.svg?style=flat-square" alt="Code Coverage"></a>
+<a href="https://golang.org"><img src="https://img.shields.io/badge/Go-1.11-blue.svg" alt="Golang"></a>
+<a href="https://golang.org"><img src="https://img.shields.io/badge/Supports-Linux-green.svg" alt="Linux"></a>
+<a href="https://golang.org"><img src="https://img.shields.io/badge/Supports-macOS-green.svg" alt="MacOS"></a>
 </p>
 
 Drm, pronounced like "dream". It is a tiny tool to avoid tragedies caused by `rm`. Actually, I did decide to write it after I `rm`ed a whole day's hard-work. It can replace `rm` in basic function, and support resume deleted files before it reaches the expiration days(e.g. 30 days).
