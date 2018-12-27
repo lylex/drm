@@ -134,8 +134,8 @@ func GetAll() ([]*Blob, error) {
 		if bg.Count == 0 {
 			continue
 		}
-		for _, b := range bg.Blobs {
-			blobs = append(blobs, &b)
+		for i := range bg.Blobs {
+			blobs = append(blobs, &bg.Blobs[i])
 		}
 	}
 
