@@ -51,7 +51,7 @@ func Move(src, dir string) {
 
 // Delete removes a file or directory from disk.
 func Delete(path string) {
-	if err := os.Remove(path); err != nil {
+	if err := os.RemoveAll(path); err != nil {
 		utils.ErrExit("error deleting file or directory: %s\n", err)
 	}
 }
